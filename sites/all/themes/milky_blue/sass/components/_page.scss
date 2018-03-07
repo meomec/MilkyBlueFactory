@@ -1,0 +1,16 @@
+.html.not-front.page-node.node-type-page:not(.page-node-29) {
+    .l-page {
+        .burger-menu-open {
+            color: $blue;
+        }
+        .sticky-menu-wrapper {
+            display: none;
+        }
+        .l-main {
+            margin-top: 18rem;
+            .l-content {
+                @include with-margins('super');
+            }
+        }
+    }
+}

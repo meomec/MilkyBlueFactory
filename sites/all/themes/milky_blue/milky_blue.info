@@ -1,0 +1,39 @@
+name = Milky Blue
+description = Please provide a description for your theme.
+base theme = omega
+screenshot = screenshot.png
+engine = phptemplate
+core = 7.x
+
+; ========================================
+; Stylesheets
+; ========================================
+stylesheets[all][] = css/milky-blue.normalize.css
+stylesheets[all][] = css/milky-blue.hacks.css
+stylesheets[all][] = css/milky-blue.styles.css
+stylesheets[all][] = css/milky-blue.no-query.css
+
+; ========================================
+; Scripts
+; ========================================
+scripts[] = js/jquery.headroom/headroom.min.js
+scripts[] = js/jquery.headroom/jQuery.headroom.min.js
+scripts[] = js/jquery.easing/jquery.easing.js
+scripts[] = js/jquery.slick/slick.min.js
+scripts[] = js/jquery.scrollTo/jquery.scrollTo.min.js
+scripts[] = js/jquery.vide.js/jquery.vide.js
+scripts[] = js/jquery.fitvids/jquery.fitvids.js
+scripts[] = js/milky-blue.behaviors.js
+
+; ========================================
+; Regions
+; ========================================
+regions[branding] = Branding
+regions[header] = Header
+regions[navigation] = Navigation
+regions[highlighted] = Highlighted
+regions[help] = Help
+regions[content] = Content
+regions[sidebar_first] = First Sidebar
+regions[sidebar_second] = Second Sidebar
+regions[footer] = Footer

@@ -1,0 +1,118 @@
+<?php
+
+/**
+* Implements hook_menu().
+*/
+
+function milkyblue_menu() {
+
+  $items['ajax/projects/%/%'] = array(
+    'page callback' => 'milkyblue_ajax_projects',
+    'page arguments' => array('block', 2, 3, 4),
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('access content'),
+  );
+
+
+  return $items;
+}
+
+
+
+function milkyblue_ajax_projects($display_id, $section, $page, $item_per_page) {
+
+  if ($section == -1) {
+    $section = null;
+  } 
+
+  $view = views_get_view('projects');
+  $view->set_current_page($page);
+  $view->set_items_per_page($item_per_page);
+  $view->get_total_rows = TRUE;
+  
+  
+  $content = $view->preview($display_id, array($section)); 
+
+  $total_items = $view->total_rows;
+  $count_items = $item_per_page * ($page+1);
+
+  if ($count_items < $total_items) {
+    $content .= milkyblue_projects_view_load_more_button($section, $item_per_page);
+  }
+
+  print $content;
+
+}
+
+function milkyblue_ajax_callback($page_callback_result) {
+  $content = drupal_render($page_callback_result);
+  print $content;
+}
+
+function milkyblue_projects_view_load_more_button($section, $item_per_page) {
+  $content = '<div class="view-projects-more-wrapper"><button data-section="' . $section . '" data-count="' . $item_per_page . '" class="view-projects-more-button section-' . $section . '">Voir plus</button></div>';
+  return $content;
+}
+
+/**
+ * Adds taxonomy header to projects view
+ * Implements hook_views_pre_build().
+ */
+function milkyblue_views_pre_build(&$view) {
+
+  global $language ;
+  $lang_name = $language->language;
+  $lang = $lang_name;
+ 
+  if(!path_is_admin(current_path()) && $view->name == 'projects' && $view->current_display == 'page') {
+    //Argument from URL
+    $cat_term = taxonomy_term_load(arg(1));
+    
+    $cat_name_ar = field_get_items('taxonomy_term', $cat_term, 'name_field', $lang);
+    $cat_body_ar = field_get_items('taxonomy_term', $cat_term, 'field_body', $lang);
+    $cat_name = $cat_name_ar[0]['value'];
+    $cat_body = $cat_body_ar[0]['value'];
+    
+    //$cat_name = 'toto';
+    //$cat_body = 'tata';
+
+    $header_title = array(
+      '#type' => 'html_tag',
+      '#tag' => 'h1',
+      '#attributes' => array(
+          'class' => array('projects-header-title'),
+      ),
+      '#value' => $cat_name,
+    );
+    $header_description = array(
+      '#type' => 'html_tag',
+      '#tag' => 'div',
+      '#attributes' => array(
+          'class' => array('projects-header-description'),
+      ),
+      '#value' => $cat_body,
+    );
+    $view->add_item('default', 'header', 'views', 'area', array('content' => render($header_title) . render($header_description), 'format' => 'full_html'));  
+  }
+}
+
+// Hide weight field in admin 
+function milkyblue_form_alter(&$form, &$form_state, $form_id) {
+  if ($form_id == 'project_node_form') {
+    $form['field_weight']['#access'] = 0;
+  }
+}
+
+/**
+ * Implements hook_i18n_string_list_TEXTGROUP_alter().
+ */
+function milkyblue_i18n_string_list_taxonomy_alter(&$strings, $type, $object) {
+  if ($type == 'taxonomy_term' && $object) {
+    if (isset($object->field_body)) {
+      $term_field_body = field_get_items('taxonomy_term', $object, 'field_body');
+      $strings['taxonomy']['term'][$object->tid]['field_body']['string'] = $term_field_body[0]['value'];
+    }
+  }
+}
+
+?>

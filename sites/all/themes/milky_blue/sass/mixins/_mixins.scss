@@ -1,0 +1,153 @@
+@mixin border($color: $red) {
+	border: 1px solid $color;
+}
+
+@mixin link($color: $white, $color_hover: $grey) {
+	color: $color;
+	text-decoration: none;
+	cursor: pointer;
+	&:hover {
+		color: $color_hover;
+	}	
+}
+
+@mixin with-margins($param: 'standard') {
+	@if $param == 'standard' {
+		@include isolation-span(12, 1, 'both');
+		/*
+		@include breakpoint($desk) {
+			@include isolation-span(8, 3, 'both');	
+		}
+		@include breakpoint($large) {
+			@include isolation-span(8, 3, 'both');	
+		}
+		*/
+		@include breakpoint($big) {
+			@include isolation-span(10, 2, 'both');	
+		}
+		/*
+		@include breakpoint($huge) {
+			@include isolation-span(8, 3, 'both');	
+		}
+		*/
+			
+	} @else if $param == 'super' {
+		@include isolation-span(12, 1, 'both');
+		padding: 0 $margin;
+		@include breakpoint($tab) {
+			padding: 0;
+			@include isolation-span(10, 2, 'both');	
+		}
+		@include breakpoint($desk) {
+			@include isolation-span(8, 3, 'both');	
+		}
+		@include breakpoint($large) {
+			@include isolation-span(6, 4, 'both');	
+		}
+		@include breakpoint($big) {
+			@include isolation-span(6, 4, 'both');	
+		}	
+		/*
+		@include breakpoint($huge) {
+			@include isolation-span(4, 5, 'both');	
+		}
+		*/		
+	}
+}
+
+@mixin without-margins() {
+	@include isolation-span(12, 1, 'both');
+}
+
+@mixin col-wrapper() {
+	@include isolation-span(12, 1, 'both');
+}
+@mixin col($col: 1) {
+	@if $col == 1 {
+		@include isolation-span(12, 1, 'both');
+		@include breakpoint($tab) {
+			@include isolation-span(6, 1, 'left', $gutter: 0);
+		}
+	} @else if $col == 2 {
+		@include isolation-span(12, 1, 'both');
+		@include breakpoint($tab) {
+			@include isolation-span(5, 8, 'right', $gutter: 0);
+		}		
+	}
+}
+
+@mixin mobile-padding() {
+	padding: 0 1rem;
+	@include breakpoint($mobile) {
+		padding: 0;
+	}
+	
+}
+
+@mixin mobile-center() {
+	text-align: center;
+	@include breakpoint($mobile) {
+		text-align: left;
+	}
+}
+
+@mixin centerer($horizontal: true, $vertical: true) {
+  position: absolute;
+  @if ($horizontal and $vertical) {
+    top: 50%;
+    left: 50%;
+	@include transform (translateX(-50%) translateY(-50%));
+  } @else if ($horizontal) {
+    left: 50%;
+	@include transform (translateX(-50%) translateY(0));
+  } @else if ($vertical) {
+    top: 50%;
+	@include transform (translateX(0) translateY(-50%));
+  }
+}
+
+@mixin hide-text($param: true) {
+	@if $param == true {
+		text-indent: -100000px;
+	} @else if ($param == false) {
+		text-indent: 0;
+	}
+}
+
+@mixin shadow(){
+	@include text-shadow(rgba($black, .5) 0px 0px .2rem);
+}
+
+@mixin show-text() {
+	text-indent: 0;
+}
+
+@mixin filet() {
+	&:after {
+		content: '—';
+		display: block;
+		line-height: 0.25;
+	}
+}
+
+@include keyframes(spin) {
+	@include transform (translateX(-50%) translateY(-50%));
+    0% { @include transform(rotate(0deg));}
+    100% { @include transform(rotate(359deg));}
+}
+
+@include keyframes(halfspin) {
+	@include transform (translateX(-50%) translateY(-50%));
+    0% { @include transform(rotate(0deg));}
+    100% { @include transform(rotate(179deg));}
+}
+
+@include keyframes(quarterspin) {
+	@include transform (translateX(-50%) translateY(-50%));
+    0% { @include transform(rotate(0deg));}
+    100% { @include transform(rotate(89deg));}
+}
+
+
+
+

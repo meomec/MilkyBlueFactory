@@ -1,0 +1,234 @@
+@import "../mixins/mixins";
+
+/*
+.burger-video {
+	position: fixed;
+	z-index: 11;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	//@include transition(left 500ms linear);
+	&.on {
+		left: 0;
+	}
+	&.off {
+		left: -100vw;
+	}
+	video {
+		max-width: none;
+    	height: 100%;
+	}
+}
+*/
+
+.burger-menu-wrapper {
+	position: fixed;
+	z-index: 25;
+	top: 0;
+	//left: 0;
+	left: -100vw;
+	width: 100vw;
+	height: 100vh;
+	background-color: $blue;
+	@include transition(left 500ms linear);
+	&.on {
+		left: 0;
+	}
+	&.off {
+		left: -100vw;
+	}
+	&.design {
+		@include mb-gradient-bg('design');
+	}
+	&.art {
+		@include mb-gradient-bg('art');
+	}
+	&.restoration {
+		@include mb-gradient-bg('restoration');
+	}
+	&.materials {
+		@include mb-gradient-bg('materials');
+		//background: transparent;
+	}
+	> ul.main-menu {
+		//@include border(yellow);
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		width: 100%;
+		@include transform(translateX(-50%) translateY(-50%));
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		> li.main-menu-item {
+			@extend .title1;
+			&:after {
+				content: none;
+			}
+			> a.main-menu-link {
+				color: $white;
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+.burger-menu-open {
+	//@include border(red);
+	position: absolute;
+	z-index: 21;
+	
+	top: #{$margin / 2};
+	left: #{$margin / 2};
+	height: #{$margin*1};
+	font: #{$margin} $font3;
+	line-height: 0;
+	
+	@include breakpoint($mobile) {
+		position: absolute;
+		top: #{$margin * 2};
+		left: #{$margin * 2};
+		background: none;
+		height: auto;
+		font-size: #{$margin*1.5};
+		line-height: 0;
+		padding-left: 0;
+	}
+	cursor: pointer;
+	color: $white;
+	@include hide-text();
+	&:after {
+		line-height: 1;
+		@include hide-text(false);
+		//@include shadow();
+		content: '\f0c9';
+		display: block;
+	}
+	&.on {
+		display: block;
+	}
+	&.off {
+		display: none;
+	}
+}
+
+.burger-menu-close {
+	//@include border();
+	position: absolute;
+	z-index: 21;
+	top: 0;
+	right: 0;
+	@include breakpoint($mobile) {
+		top: #{$margin};
+		right: #{$margin};
+	}
+	cursor: pointer;
+	color: $white;
+	@include hide-text();
+	line-height: 0;
+	font: 3rem $font3;
+	width: 4rem;
+	height: 4rem;
+	&:after {
+		@include hide-text(false);
+		content: '\e800';
+		display: block;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		@include transform(translateX(-50%) translateY(-50%));
+	}
+	&:hover {
+		@include animation(spin 800ms 1 linear);
+	}
+}
+
+.sticky-menu-wrapper {
+	//@include border();
+	display: none;
+	@include breakpoint($mobile) {
+		display: block;
+	}
+	position: absolute;
+	z-index: 10;
+	top: calc(100vh - #{$margin});
+	left: 0;
+	width: 100vw;
+	display: none;
+	@include breakpoint($mobile) {
+		display: block;
+	}
+	background-color: $white;	
+	padding: $margin;
+	.sticky-menu {
+		width: 100%;
+		ul.main-menu {
+			//@include border(yellow);
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			min-width: 100%; /* fix for old Firefox */
+			@include display-flex();
+			@include flex-wrap(wrap);
+			@include justify-content(space-between);
+			@include align-items(center);
+			display: -ms-flexbox;
+			-ms-flex-pack: space-between;				
+			> li.main-menu-item {
+				//@include border(red);	
+				height: 2rem;
+				> .main-menu-link {
+					//@include border(yellow);
+                    @extend .title2;
+                    line-height: 1;
+					color: $black;
+					text-decoration: none;
+					&:hover {
+						color: $black;
+					}
+					&.active {
+						color: $black;
+					}
+					&#main-menu-home {
+						display: none;
+					}
+				}
+				&.main-menu-home {
+					display: none;
+				}
+			}
+        }
+    }
+    &.sticky {
+		position: fixed;
+		top: 0;
+		left: 0;
+        //top: $margin;
+    }
+}	
+
+
+#header {
+	display: block;
+	@include hide-text();
+	position: fixed;
+	z-index: 22;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: #{$margin * 2};
+	background: $blue url(../../../images/Logo_Milky_Blue_Factory_white.svg) center center;
+	background-repeat: no-repeat;
+	background-size: 50%;
+	@include transition(top 250ms linear);
+	&.pinned {
+		top: 0;
+	}
+	&.unpinned {
+		top: #{$margin * -2};
+	}
+	@include breakpoint($mobile) {
+		display: none;
+	}
+}

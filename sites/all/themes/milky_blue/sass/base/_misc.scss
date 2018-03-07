@@ -1,0 +1,35 @@
+%clearfix {
+    &:after {
+      content: "";
+      display: table;
+      clear: both;
+    }
+  }
+
+
+.facebook-responsive {
+  overflow:hidden;
+  padding-bottom:56.25%;
+  position:relative;
+  height:0;
+  iframe {
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
+  }
+}
+
+.messages {
+  position: absolute;
+  top: calc(100vh - #{$margin*2});
+  left: $margin;
+  width: calc(100% - #{$margin*2});
+  @include transform(translateY(-50%));
+  z-index: 100;
+}
+
+.element-invisible {
+  width: 1px;
+}

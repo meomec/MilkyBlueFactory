@@ -1,0 +1,94 @@
+.normal {
+    font-family: $font;
+	letter-spacing: 1px;
+	line-height: 1.5;
+	color: $black;
+}
+
+.title1 {
+    font: 2rem $font2;
+    @include breakpoint($mobile) {font-size: 3rem;}
+    @include breakpoint($desk) {font-size: 4rem;}
+    font-weight: 400;
+    text-align: center;
+    margin: 0 0 2rem 0;
+    padding: 0;
+    &:after {
+		content: '—';
+		display: block;
+		line-height: 1;
+    }
+}
+
+.title2 {
+    font: 1.5rem $font2;
+    font-weight: 400;
+    margin: 0 0 0.5rem 0;
+    @include breakpoint($mobile) {font-size: 1.5rem; margin-bottom: .5rem;}
+    @include breakpoint($tab) {font-size: 1.5rem; margin-bottom: .5rem;}
+    @include breakpoint($desk) {font-size: 2rem; margin-bottom: .75rem;}
+    @include breakpoint($large) {font-size: 2rem; margin-bottom: .75rem;}
+    text-align: left;
+    
+    padding: 0;
+}
+
+.title3 {
+    font: 1.5rem $font;
+    font-weight: 400;
+    text-align: left;
+    margin: 0 0 0.75rem 0;
+    padding: 0;
+}
+
+.title-big {
+    position: absolute;
+    top: 58vh;
+    left: 50vw;
+    width: 100%;
+    @include transform(translateX(-50%) translateY(-50%));
+    font: 2rem $font2;
+    @include breakpoint($mobile) {font-size: 3rem;}
+    @include breakpoint($desk) {font-size: 6rem;}
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    color: $white;
+    @include shadow();
+    //display: none;
+    &.on {
+        display: block;
+    }
+    &.off {
+        display: none;
+    }
+}
+
+p.left {
+	text-align: left;
+}
+p.right {
+	text-align: right;
+}
+.center {
+	text-align: center;
+}
+.line-through {
+	text-decoration: line-through;
+}
+
+a, .link {
+    color: $blue;
+    text-decoration: underline;
+    &:hover {
+        color: $blue2;
+    }
+}
+
+%nolink {
+    color: $black;
+    text-decoration: none;
+    display: block;
+}
+
+

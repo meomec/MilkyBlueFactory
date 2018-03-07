@@ -1,0 +1,14 @@
+name = Metatag: Path
+description = Provides Metatag integration for custom path.
+package = SEO
+core = 7.x
+
+dependencies[] = metatag:metatag
+
+
+; Information added by Drupal.org packaging script on 2017-10-27
+version = "7.x-1.0"
+core = "7.x"
+project = "metatag_path"
+datestamp = "1509098288"
+

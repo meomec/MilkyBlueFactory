@@ -1,0 +1,78 @@
+#contact-wrapper {
+    position: fixed;
+    z-index: 12;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    //background-color: rgba(56, 98, 211, 0.95);
+    background-color: rgba(255, 255, 255, 0.8);
+    display: none;
+    @include opacity(0);
+    @include transition(opacity 250ms linear);
+    &.on {
+        display: block;
+    }
+    &.opaque {
+        @include opacity(1);
+    }
+    > .contact {
+        //@include border;
+        @include opacity(0);
+        @include transition(opacity 250ms linear);
+        @include centerer();
+        background: $white;
+        padding: $margin;
+        font-size: 1.25rem;
+        @include breakpoint($tab) {
+            font-size: 1rem;
+        }
+        @include breakpoint($desk) {
+            font-size: 1.75rem;
+        }
+        line-height: 2;
+        text-align: center;
+        
+        &.on {
+            @include opacity(1);
+        }
+        
+        .contact-logo {
+            width: 100vw;
+            height: auto;
+            @include breakpoint($mobile) {width: 90vw;}
+            @include breakpoint($tab) {width: 70vw;}
+            @include breakpoint($desk) {width: 50vw;}
+            @include breakpoint($large) {width: 50vw;}
+            @include breakpoint($big) {width: 50vw;}
+            @include breakpoint($huge) {width: 50vw;}
+
+        }
+        .close {
+            //@include border();
+            position: absolute;
+            top: #{$margin * -1};
+            right: calc(50% - 1rem);
+            @include breakpoint($mobile) {
+                top: #{$margin * -0.5};
+                right: #{$margin * -0.5};
+                @include transform(translateX(0));
+            }
+            cursor: pointer;
+            color: $blue;
+            @include hide-text();
+            line-height: 0;
+            &:hover {
+                color: $blue2;
+                @include animation(halfspin 200ms 1 linear);
+            }
+            &:after {
+                content: '\e801';
+                font: 2rem $font3;
+                @include hide-text(false);
+                display: block;
+            }
+        }
+
+    }
+}

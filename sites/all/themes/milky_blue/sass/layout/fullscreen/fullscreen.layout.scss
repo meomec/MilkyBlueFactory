@@ -1,0 +1,283 @@
+// Import external libraries.
+@import "compass";
+@import "breakpoint";
+@import "toolkit";
+@import "singularitygs";
+
+
+// Import variables, abstractions, base styles and components using globbing.
+//
+// Globbing will always import files alphabetically. Optimally, all your
+// components should be self-contained and explicit enough to not have any
+// contained styles leak into unrelated components: The import order should not
+// affect the result.
+//
+// If there are variables, functions or mixins that depend on each other and
+// therefore need to be imported in a specific order you can import them
+// directly. Variables-, function- or mixin providing partials should never
+// output any styles themselves: Importing them multiple times to resolve
+// dependencies shouldn't be a problem.
+//@import "../../mixins/**/*";
+@import "../../mixins/mixins";
+@import "../../variables/**/*";
+@import "../../base/**/*";
+@import "../../abstractions/**/*";
+@import "../../components/**/*";
+
+@include add-grid($grids);
+@include add-gutter($gutters);
+
+
+
+html {
+	@extend .normal;
+	@include breakpoint($mobile){
+		font-size: 13px;
+	}
+	@include breakpoint($tab){
+		font-size: 15px;
+	}
+	@include breakpoint($desk){
+		font-size: 16px;
+	}
+	@include breakpoint($large){
+		font-size: 18px;
+	}
+	@include breakpoint($big){
+		font-size: 20px;
+	}
+	@include breakpoint($huge){
+		font-size: 22px;
+	}	
+}
+
+body {
+	background-color: $white;
+	/*
+	width: 100vw;
+	min-width: $mobile;
+	@include breakpoint($mobile){
+		min-width: $mobile;
+	}
+	@include breakpoint($tab){
+		min-width: $tab;
+	}
+	@include breakpoint($desk){
+		min-width: $desk;
+	}
+	@include breakpoint($large){
+		min-width: $large;
+	}
+	@include breakpoint($big){
+		min-width: $big;
+	}
+	@include breakpoint($huge){
+		min-width: $huge;
+	}	
+	*/
+
+	.l-page {
+		.l-logo {
+			//@include border(red);
+			position: absolute;
+			z-index: 1;
+			top: #{$margin * 4};
+			left: 50%;
+			width: calc(100vw - #{$margin * 3});
+    		height: 100px;
+			transform: translate(-50%, 0);
+			background: url(../../../images/Logo_Milky_Blue_Factory.svg) no-repeat center center;
+			background-size: contain;
+			text-align: center;
+			@include hide-text;
+			@include breakpoint($mobile) {
+				top: #{$margin * 2};
+				width: 70vw;
+    			height: 20vh;
+			}
+			@include breakpoint($desk) {
+				width: #{$margin * 15};
+				height: #{$margin * 4};	
+			}
+		}
+		.l-main {
+			@include without-margins();
+			.section {
+				clear: both;
+				@include with-margins();
+				padding: 0 $margin;
+				.section_intro {
+					background-color: $red;
+					color: $white;
+					padding: $margin;
+					margin: 0 0 $margin 0;
+					text-align: center;
+					.intro {
+						width: 96%;
+						margin: 0 auto;
+						font: 1.5rem $font2;
+						@include breakpoint($mobile) {
+							width: 60%;
+							font: 2rem $font2;
+						}
+					}
+				}
+				&.design {
+					margin-top: 0;
+					@include breakpoint($mobile) {
+						margin-top: #{$margin * 2};
+					}
+					& > .section_intro {
+						@include mb-gradient-bg('design');
+					}
+				}
+				&.art > .section_intro {
+					@include mb-gradient-bg('art');
+				}
+				&.restoration > .section_intro {
+					@include mb-gradient-bg('restoration');
+				}
+				&.materials > .section_intro {
+					//@include mb-gradient-bg('materials');
+					background-image: none;
+					background: transparent;
+					@include text-shadow($black 0px 0px 1rem);
+					
+				}
+			}
+			.user-login {
+				position: fixed;
+				top: 50vh;
+				left: 50vw;
+				@include transform(translateX(-50%) translateY(-50%));
+				.form-item.form-type-textfield.form-item-name,
+				.form-item.form-type-password.form-item-pass {
+					input.form-text {
+						border: 0;
+						background-color: $lightgrey;
+						color: $black;
+						font-size: 2rem;
+						width: 17rem;
+						margin: 0.5rem 0;
+						padding: 0.5rem;
+					}
+				}
+				.form-actions {
+					.form-submit {
+						@extend .button;
+					}
+				}
+			}
+
+		}
+	}
+}
+
+#ajax_throbber_wrapper {
+	position: fixed;
+	z-index: 20;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background-color: rgba(255, 255, 255, 0.9);
+	#ajax_throbber_inner {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		@include centerer();
+		//@include border();
+		> .ajax_throbber {
+			//@include border($blue);
+			font: 2rem $font3;
+			color: $blue;
+			@include animation(spin 2s infinite linear);
+		}
+	}
+}
+
+.separator {
+	@include without-margins;
+	display: block;
+	width: 100vw;
+	height: 100vh;
+	//@include breakpoint($mobile) {height: 100vh;}
+	//@include breakpoint($tab) {height: 100vh;}
+	//@include breakpoint($desk) {height: 100vh;}
+	@include breakpoint($large) {height: calc(100vh * 2/3);}
+	//@include breakpoint($big) {height: calc(100vh / 2);}
+	@include breakpoint($huge) {height: calc(100vh / 2);}
+	border: 0;
+	margin: 0;
+	position: relative;
+	&:after {
+		content: '—';
+		font: 4rem $font2;
+		line-height: 0;
+		position: absolute;
+		top: 50%;
+		width: 100%;
+		text-align: center;
+	}
+}
+
+.html.not-logged-in.page-user {
+	.l-logo,
+	.menu-language-wrapper,
+	.sticky-menu-wrapper,
+	.l-footer {
+		display: none;
+	}
+}
+
+.media.media-element-container.media-wysiwyg {
+	.file {
+		.media-element.file-wysiwyg {
+			display: inline-block;
+			&.media-youtube-video {
+				display: block;
+			}
+		}
+
+	}
+}
+
+.edit-wrapper {
+	position: fixed;
+	display: block;
+	z-index: 20;
+	top: #{$margin * 2};
+	right: 0;
+	color: $blue;
+	&.edit-slide {
+		position: absolute;
+		top: 0;
+		right: 0;
+	}
+	> .edit {
+		width: $margin;
+		height: $margin;
+		font: $margin $font3;
+		position: relative;
+		@include hide-text(true);
+		display: block;
+		line-height: 0;
+		text-decoration: none;
+		&:after {
+			position: absolute;
+			content: '\e80a';
+			@include hide-text(false);
+			display: block;
+			line-height: 1;
+		}
+		&:hover {
+			color: $blue2;
+			text-decoration: underline;
+		}
+	}		
+}
+
+#block-block-2 {
+	@include with-margins('super');
+	margin-bottom: 3rem;
+}

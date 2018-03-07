@@ -1,0 +1,22 @@
+diff --git a/includes/media_facebook_video.formatters.inc b/includes/media_facebook_video.formatters.inc
+index 1156480..47c6790 100644
+--- a/includes/media_facebook_video.formatters.inc
++++ b/includes/media_facebook_video.formatters.inc
+@@ -71,7 +71,7 @@ function media_facebook_video_file_formatter_video_settings($form, &$form_state,
+     '#title' => t('Width'),
+     '#type' => 'textfield',
+     '#default_value' => $settings['width'],
+-    '#element_validate' => array('_facebook_validate_video_width'),
++    '#element_validate' => array('_media_facebook_video_validate_video_width'),
+   );
+ 
+   // @see http://developer.facebook.com/player/embedding
+@@ -102,7 +102,7 @@ function media_facebook_video_file_formatter_video_settings($form, &$form_state,
+ /**
+  * Validation for width.
+  */
+-function media_facebook_video_validate_video_width($element, &$form_state, $form) {
++function _media_facebook_video_validate_video_width($element, &$form_state, $form) {
+   // Check if the value is a number with decimal, percentage sign or "auto".
+   $pattern = '/^(auto|([0-9]*(\.[0-9]+)?%?))$/';
+   if (!empty($element['#value']) && !preg_match($pattern, $element['#value'])) {

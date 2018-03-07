@@ -1,0 +1,14 @@
+diff --git a/includes/media_facebook_video.formatters.inc b/includes/media_facebook_video.formatters.inc
+index 1156480..bbbb1fb 100644
+--- a/includes/media_facebook_video.formatters.inc
++++ b/includes/media_facebook_video.formatters.inc
+@@ -43,7 +43,8 @@ function media_facebook_video_file_formatter_info() {
+ function media_facebook_video_file_formatter_video_view($file, $display, $langcode) {
+   $scheme = file_uri_scheme($file->uri);
+ 
+-  if ($scheme == 'facebook') {
++  // WYSIWYG does not yet support video inside a running editor instance.
++  if ($scheme == 'facebook' && empty($file->override['wysiwyg'])) {
+     $element = array(
+       '#theme' => 'media_facebook_video',
+       '#uri' => $file->uri,

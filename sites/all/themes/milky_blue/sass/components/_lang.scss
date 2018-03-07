@@ -1,0 +1,40 @@
+@import "../mixins/mixins";
+
+.menu-language-wrapper {
+    position: fixed;
+    z-index: 11;
+    top: 50vh;
+    right: 0;
+    width: #{$margin};
+    overflow: hidden;
+    font: .75rem $font;
+    @include breakpoint($mobile) {
+        font-size: 1rem;
+    }
+    text-align: center;
+    text-transform: uppercase;
+    color: $black;
+    @include transform(translateY(-50%));
+    ul.menu-language {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        li.language-item {
+            font-weight: $normal;
+            &.first {
+                &:after {
+                    display: block;
+                    content: '—';
+                    font-weight: $normal;
+                }
+            }
+            &.active {
+                font-weight: $bold;
+            }
+            a.language-link {
+                color: $black;
+                text-decoration: none;
+            }
+        }
+    }
+}

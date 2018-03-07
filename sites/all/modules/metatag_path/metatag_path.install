@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the block module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function metatag_path_schema() {
+  $schema['metatag_path'] = array(
+    'description' => 'Stores block settings, such as region and visibility settings.',
+    'fields'      => array(
+      'mid'      => array(
+        'type'        => 'serial',
+        'not null'    => TRUE,
+        'description' => 'Primary Key: Unique ID.',
+      ),
+      'machine_name'     => array(
+        'type'         => 'varchar',
+        'length'       => 255,
+        'not null'     => TRUE,
+        'default'      => '',
+        'description'  => 'Machine name.',
+        'translatable' => TRUE,
+      ),
+      'pages'    => array(
+        'type'        => 'text',
+        'not null'    => TRUE,
+        'description' => 'Contents of the "Pages"; contains either a list of paths on which to include concrete path metatgs',
+      ),
+      'title'    => array(
+        'type'         => 'varchar',
+        'length'       => 255,
+        'not null'     => TRUE,
+        'default'      => '',
+        'description'  => 'Custom title for the metatag config.',
+        'translatable' => TRUE,
+      ),
+      'override' => array(
+        'type'        => 'int',
+        'not null'    => TRUE,
+        'default'     => 0,
+        'size'        => 'tiny',
+        'description' => 'Flag to override existed metatgs for current path',
+      ),
+    ),
+    'primary key' => array('mid'),
+    'unique keys' => array(
+      'machine_name' => array('machine_name'),
+    ),
+  );
+
+  return $schema;
+}
+
+function metatags_uninstall() {
+  db_delete('metatag_config')
+    ->condition('instance', db_like('metatag_path') . '%', 'LIKE')
+    ->execute();
+}
+
+/**
+ * Implements hook_install().
+ */
+/*function metatag_path_install() {
+  db_update('system')
+    ->fields(array('weight' => -1))
+    ->condition('name', 'metatag_path')
+    ->execute();
+}*/

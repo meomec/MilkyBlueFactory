@@ -1,0 +1,187 @@
+@import "../mixins/mixins";
+
+.view-materials,
+.materials {
+    .view-content {
+        margin-top: $margin;
+        .views-row {
+            text-align: center;
+            $new-gutter: $gutters;
+            margin-bottom: $new-gutter;            
+            @include breakpoint($mobile) {
+                @include float-span(6, 'left', $gutter: $new-gutter);
+                &:nth-child(2n) {
+                    margin-right: 0;
+                }
+            }
+            @include breakpoint($desk) {
+                @include float-span(4, 'left', $gutter: $new-gutter);
+                &:nth-child(2n) {
+                    @include float-span(4, 'left', $gutter: $new-gutter);
+                }
+                &:nth-child(3n) {
+                    margin-right: 0;
+                }
+            }
+            @include breakpoint($large) {
+                @include float-span(3, 'left', $gutter: $new-gutter);
+                &:nth-child(3n),
+                &:nth-child(2n) {
+                    @include float-span(3, 'left', $gutter: $new-gutter);
+                }
+                &:nth-child(4n) {
+                    margin-right: 0;
+                }
+            }
+            @include breakpoint($big) {
+                
+            }
+
+            
+        }
+    }
+}
+
+.material {
+    position: relative;
+    cursor: pointer;
+    .material-name {
+        //@include border;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        z-index: 2;
+        top: 50%;
+        @include transform(translateY(-50%));
+        left: 0;
+        width: 100%;
+        height: auto;
+        font: 2rem $font2;
+        font-weight: 400;
+        text-align: center;
+        color: $white;
+        @include opacity(1);
+        @include text-shadow($black 0px 0px 0.75rem);
+        @include breakpoint($tab) {
+            @include opacity(0);
+            &.on {
+                @include opacity(1);
+            }
+            &.off {
+                @include opacity(0);
+            }
+        }
+    }
+    
+    .material-image-wrapper {
+        width: inherit;
+        height: inherit;
+        overflow: hidden;
+        .material-image {
+            width: inherit;
+            height: inherit;
+            background-position: center;
+            background-size: 100%;
+            @include transition(background-size 200ms ease-out);
+            @include opacity(1);
+            &.on {
+                background-size: 103%;
+                @include opacity(0.65);
+            }
+            &.off {
+                background-size: 100%;
+            }
+            &.blur {
+                @include filter(blur(2px));
+            }
+        }
+    }
+
+
+    .box {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        //width: calc(100% - #{$margin});
+        //height: calc(100% - #{$margin});
+        width: 100%;
+        height: 100%;
+        border: #{$margin*2} solid red;
+        @include opacity(0);
+        @include transition(opacity 500ms ease-out);
+        &.on {
+            @include opacity(1);
+        }
+        &.off {
+            @include opacity(0);
+        }
+    }
+
+}
+
+.section.materials, {
+    .view-materials {
+        //@include without-margins();
+        margin: 0;
+        @include breakpoint($mobile) {
+            margin: 0 #{$margin * -1} 0 0;
+        }
+    }
+}
+
+.page-materials .view.materials {
+    //@include border();
+    //margin: #{$margin*2} #{$margin} 0 #{$margin};
+    margin: #{$margin*2} 0 0 #{$margin};
+}
+
+.page-node-29 {
+    .materials-title {
+        @extend .title-big;
+        display: none;
+        &.on {
+            display: block;
+        }
+    }
+    .page.materials {
+        margin-top: 4rem;
+        .section_intro {
+            padding: #{$margin/2};
+            margin: 0 0 #{$margin} 0;
+            text-align: center;
+            @include breakpoint($mobile) {
+                padding: $margin;
+                margin: #{$margin*2} 0 $margin 0;
+            }
+            .intro {
+                width: 100%;
+                @include breakpoint($tab) {
+                    width: 60%;
+                }
+                margin: 0 auto;
+                //font: 1.5rem $font2;
+                text-align: left;
+            }
+        }
+        .view-materials {
+            width: calc(100vw - #{$margin});
+            padding-left: $margin;
+            @include breakpoint($mobile) {
+                width: 100vw;
+            }
+            //@include without-margins();
+            //margin: 0 #{$margin * -1} 0 0;
+        }
+    }
+    #materials-video-wrapper {
+        width: 100vw;
+        height: 100vh;
+        #materials-video {
+            margin: $margin;        
+            width: calc(100vw - #{$margin * 2}); 
+            height: calc(100vh - #{$margin * 2}); 
+            overflow: hidden;
+        }
+    }
+}

@@ -1,0 +1,9 @@
+name = Milky Blue Factory custom module
+description = Custom Module for Milky Blue Factory's web site
+package = Milky Blue Factory
+core = 7.x
+version = "1.0"
+
+
+files[] = milkyblue.module
+scripts[] = js/milkyblue.js

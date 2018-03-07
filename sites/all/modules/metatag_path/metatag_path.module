@@ -1,0 +1,244 @@
+<?php
+/**
+ * @file
+ * Provides native meta tag integration with Views.
+ */
+/**
+ * Implements hook_ctools_plugin_api().
+ */
+function metatag_path_ctools_plugin_api($owner, $api) {
+  if ($owner == 'metatag' && $api == 'metatag') {
+    return array('version' => 1);
+  }
+}
+
+/**
+ * Implements hook_metatag_config_delete()
+ */
+function metatag_path_metatag_config_delete($config) {
+  if ($instance = _metatag_path_is_metatag_path_instance($config->instance)) {
+    db_delete('metatag_path')
+      ->condition('mid', $instance->mid)
+      ->execute();
+  }
+}
+
+/**
+ * Implements hook_page_alter().
+ */
+function metatag_path_page_alter(&$page) {
+  if ((path_is_admin(current_path()) && !variable_get('metatag_tag_admin_pages', FALSE))
+  || !metatag_config_is_enabled('metatag_path')) {
+    return;
+  }
+  $metatag_path = _metatag_path_instance_by_path_load();
+  if (!$metatag_path) {
+    return;
+  }
+
+  $region = variable_get('metatag_page_region', 'content');
+
+  //unset global metatags
+  if (!empty($page[$region]['metatags']) && !$metatag_path->override) {
+    foreach ($page[$region]['metatags'] as $name => $value) {
+      if (strpos($name, 'global') === 0) {
+        unset($page[$region]['metatags'][$name]);
+      }
+    }
+  }
+  else {
+    unset($page[$region]['metatags']);
+  }
+  if (empty($page[$region]['metatags'])) {
+    $instance = 'metatag_path:' . $metatag_path->machine_name;
+    $cid_parts = array(
+      'instance' => $instance,
+      'path'     => request_path(),
+    );
+    $cid = metatag_cache_default_cid_parts($cid_parts);
+
+    if ($cache = metatag_cache_get($cid)) {
+      $metatags = $cache->data;
+    }
+    else {
+      $metatags = metatag_metatags_view($instance, array());
+      if (variable_get('metatag_cache_output', FALSE)) {
+        metatag_cache_set($cid, $metatags);
+      }
+    }
+    $page[$region]['metatags'][$instance] = $metatags;
+  }
+}
+
+function _metatag_path_instance_by_path_load($path = NULL) {
+  $instances = db_select('metatag_path', 'mp')
+    ->fields('mp')
+    ->execute()
+    ->fetchAllAssoc('mid');
+  $path = (empty($path)) ? $_GET['q'] : $path;
+  foreach ($instances as $instance) {
+    if ($instance->pages) {
+      $pages = drupal_strtolower($instance->pages);
+      $alias = drupal_strtolower(drupal_get_path_alias($path));
+      $page_match = drupal_match_path($alias, $pages);
+      if ($path != $alias) {
+        $page_match = $page_match || drupal_match_path($alias, $pages);
+      }
+      if ($page_match) {
+        $config = ctools_export_load_object('metatag_config', 'names', array('metatag_path:' . $instance->machine_name));
+        $config = reset($config);
+        if (empty($config->disabled)) {
+          return $instance;
+        }
+      }
+    }
+  }
+  return FALSE;
+}
+
+function _metatag_path_machine_name_load($machine_name) {
+  $instances = db_select('metatag_path', 'mp')
+    ->fields('mp')
+    ->condition('machine_name', $machine_name)
+    ->execute()
+    ->fetchAllAssoc('mid');
+  return reset($instances);
+}
+
+function _metatag_path_load_all_instances() {
+  $instances = db_select('metatag_path', 'mp')
+    ->fields('mp')
+    ->execute()
+    ->fetchAllAssoc('mid');
+  return $instances;
+}
+
+function _metatag_path_form_add_fieldset(&$form, $instance = NULL) {
+  $exist = !empty($instance);
+  $form['metatag_path'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Metatag path'),
+    '#collapsible' => TRUE,
+    '#collapsed' => empty($instance) ? FALSE : TRUE,
+    '#tree' => TRUE,
+    '#weight' => 99,
+  );
+  $form['metatag_path']['title'] = array(
+    '#type'          => 'textfield',
+    '#title'         => t('Title'),
+    '#maxlength'     => 255,
+    '#description'   => t('The title of the metatags path shown on the admin page.'),
+    '#default_value' => isset($instance->title) ? $instance->title : '',
+    '#required' => $exist,
+  );
+  if (!$exist) {
+    $form['metatag_path']['machine_name'] = array(
+      '#type'         => 'machine_name',
+      '#title'         => t('Machine-readable name'),
+      '#maxlength'    => 255,
+      '#machine_name' => array(
+        'exists' => '_metatag_path_machine_name_load',
+        'source' => array ('metatag_path', 'title'),
+      ),
+      '#required' => $exist,
+    );
+  }
+  else {
+    $form['metatag_path']['machine_name'] = array(
+      '#type'  => 'value',
+      '#value' => $instance->machine_name,
+    );
+    $form['metatag_path']['mid'] = array(
+      '#type'  => 'value',
+      '#value' => $instance->mid,
+    );
+  }
+  $form['metatag_path']['pages'] = array(
+    '#type'          => 'textarea',
+    '#title'         => t('Pages'),
+    '#default_value' => isset($instance->pages) ? $instance->pages : '',
+    '#description'   => t("Specify pages by using their paths. Enter one path per line. The '*' character is a wildcard"),
+    '#required' => $exist,
+  );
+  $form['metatag_path']['override'] = array(
+    '#type'          => 'checkbox',
+    '#title'         => t('Override'),
+    '#default_value' => isset($instance->override) ? $instance->override : '',
+    '#description'   => t("If checked, then metatags provided by this module will override others"),
+  );
+
+  if (!$exist) {
+    $state = array(
+      ':input[name="instance"]' => array('value' => 'metatag_path'),
+    );
+    $form['metatag_path']['pages']['#states'] = array('required' => $state,);
+    $form['metatag_path']['machine_name']['#states'] = array('required' => $state,);
+    $form['metatag_path']['title']['#states'] = array('required' => $state,);
+    $form['metatag_path']['#states'] = array('visible' => $state,);
+  }
+  array_unshift($form['#submit'], 'metatag_path_metatag_config_add_form_submit');
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function metatag_path_form_metatag_config_add_form_alter(&$form, &$form_state, $form_id) {
+  $form['instance']['#options']['Metatag path'] = array(
+    'metatag_path' => 'Create path metatag',
+  );
+  array_unshift($form['#validate'], 'metatag_path_metatag_config_add_form_validate');
+  _metatag_path_form_add_fieldset($form);
+}
+
+function metatag_path_form_metatag_config_edit_form_alter(&$form, &$form_state, $form_id) {
+  if ($instance = _metatag_path_is_metatag_path_instance($form['instance']['#value'])) {
+    _metatag_path_form_add_fieldset($form, $instance);
+  }
+}
+
+function _metatag_path_is_metatag_path_instance($instance) {
+  $instance = explode(':', $instance);
+  if (count($instance) == 2 && $instance[0] = 'metatag_path') {
+    $instance = _metatag_path_machine_name_load($instance[1]);
+    if ($instance) {
+      return $instance;
+    }
+  }
+  return FALSE;
+}
+
+function metatag_path_metatag_config_add_form_submit($form, &$form_state) {
+  if (strpos($form_state['values']['instance'],'metatag_path') === 0) {
+    $instance = (object) $form_state['values']['metatag_path'];
+    $instance->pages = trim($instance->pages);
+    metatag_path_instance_save($instance);
+    if ($form_state['values']['instance'] == 'metatag_path') {
+      $form_state['values']['instance'] .= ':' . $instance->machine_name;
+    }
+  }
+}
+
+function metatag_path_metatag_config_add_form_validate($form, &$form_state) {
+  if ($form_state['values']['instance'] == 'metatag_path') {
+    foreach ($form_state['values']['metatag_path'] as $name => $value) {
+      if ($name == 'override') {
+        continue;
+      }
+      if (empty($value)) {
+        form_error($elements, t('!name field is required.', array('!name' => $form['metatag_path'][$name]['#title'])));
+      }
+    }
+  }
+}
+
+/**
+ * Save a metatag path instance record to the database.
+ */
+function metatag_path_instance_save($instance) {
+  if (empty($instance->mid)) {
+    drupal_write_record('metatag_path', $instance);
+  }
+  else {
+    drupal_write_record('metatag_path', $instance, array('mid'));
+  }
+}

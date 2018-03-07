@@ -1,0 +1,333 @@
+@import "../mixins/mixins";
+
+.node--project {
+    &.node-teaser {
+        margin-bottom: $margin;
+        .project-teaser-image {
+            @include breakpoint($tab) {
+                &.normal {
+                    @include float-span(6, 'left');
+                }
+                &.large {
+                    @include float-span(9, 'left');
+                }
+            }
+        }
+        .right {
+            @include breakpoint($tab) {
+                &.normal {
+                    @include float-span(6, 'left');
+                    margin-right: 0;
+                }
+                &.narrow {
+                    @include float-span(3, 'left');
+                    margin-right: 0;
+                }
+            }
+            position: relative;
+            .right-content {
+                position: relative;
+                text-align: center;
+                @include breakpoint($mobile) {
+                    position: absolute;
+                    top: 50%;
+                    @include transform(translateY(-50%));
+                    text-align: left;
+                }
+                @include transition(opacity 500ms);
+                &.on {
+                    @include opacity(1);
+                }
+                &.off {
+                    @include opacity(0);
+                }
+                .project-teaser-title > .project-teaser-title-link {
+                    @extend .title2;
+                    text-decoration: none;
+                    &.design {
+                        @include mb-color('design');
+                    }
+                    &.art {
+                        @include mb-color('art');
+                    }
+                    &.restoration {
+                        @include mb-color('restoration');
+                    }
+                    &.materials {
+                        @include mb-color('materials');
+                    }
+                }
+                .project-teaser-subtitle {
+                    margin: 0;
+                    padding: 0;
+                    font-weight: normal;
+                    @extend .normal;
+                    font-size: 1em;
+                }
+                > .field--name-body {
+                    @extend .normal;
+                }
+            }
+        }
+    }
+    &.node--full {
+        .project-image-main {
+            margin: #{$margin};
+            width: calc(100vw - #{$margin}*2);
+            height: calc(100vh - #{$margin}*2);
+            background-size: cover;
+            background-position: center center;
+        }
+        .project-title {
+            @extend .title-big;
+            display: none;
+            &.on {
+                display: block;
+            }
+        }
+        .project-content-wrapper {
+            margin: #{$margin * 4} $margin 0 $margin;
+            @extend %clearfix;
+            .project-title-again {
+                @extend .title1;
+                margin-top: 2rem;
+                margin-bottom: 4rem;
+            }
+            .project-body {
+                @include breakpoint($mobile) {
+                    float: right;
+                    width: 50%;
+                    padding-left: #{$margin/4};
+                }
+                p {
+                    margin-top: 0;
+                }
+                .project-subtitle-wrapper {
+                    .project-subtitle {
+                        @extend .title2;
+                        &:after {
+                            display: block;
+                            content: '—';
+                            line-height: 1;
+                        }
+                    }
+                    .project-category {
+                        @extend .title3;
+                        margin-top: -1rem;
+                        display: block;
+                        @extend %nolink;
+                    }
+                }
+            }
+            .project-images {
+                @include breakpoint($mobile) {
+                    float: left;
+                    width: 50%;
+                    padding-right: #{$margin/4};
+                }
+                .project-media-wrapper {
+                    margin-bottom: #{$margin/2};
+                    position: relative;
+                    .project-image-caption {
+                        position: absolute;
+                        bottom: 0;
+                        left: #{$margin/2};
+                        background-color: $white;
+                        padding: .5rem 1rem 0 1rem;
+                        line-height: 1;
+                        @include breakpoint($mobile) {
+                            padding: .25rem .5rem 0 .5rem;
+                        }
+                        
+                    }
+                }
+            }
+        }
+        .project-related {
+            .project-related-bigtitle {
+                @extend .title1;
+                margin-top: 2rem;
+                margin-bottom: 2rem;
+            }
+            margin: #{$margin * 2} $margin 0 $margin;
+            float: left;
+            width: calc(100% - #{$margin * 2});
+            .view-related {
+                .view-content {
+                    text-align: center;
+                    @include display-flex;
+                    @include flex-wrap(wrap);
+                    @include justify-content(space-evenly);
+                    .views-row {
+                        display: inline-block; /* non-flexbox browsers */
+                        margin: 0 0 $margin 0;
+                        @include breakpoint($mobile) {
+                            margin: 0 #{$margin/2} $margin 0;
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+    &.node--project--related {
+        .related-image-wrapper {
+            .related-image {
+                width: auto;
+                margin: 0 auto;
+            }
+        }
+        .related-title-wrapper {
+            margin-top: 1rem;
+            .related-title {
+                @extend .title2;
+                text-align: center;
+                text-decoration: none;
+                color: $black;
+                &:after {
+                    display: block;
+                    content: '—';
+                    line-height: 1;
+                }
+            }
+            .related-category {
+                @extend .title3;
+                text-align: center;
+                @extend %nolink;
+            }
+        }
+    }
+    .project-more {
+        //@include border;
+        display: block;
+        @include hide-text(true);
+        color: $blue;
+        text-decoration: none;
+        text-align: center;
+        line-height: 0;
+        width: 2rem;
+        height: 2rem;
+        font: 1.5rem $fontello;
+        margin: 0 auto;
+        position: relative;
+        &:after {
+            display: block;
+            @include hide-text(false);
+            content: '\e809';
+            text-align: center;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            @include transform(translateX(-50%) translateY(-50%));
+        }
+        &.design {
+            @include mb-color('design');
+        }
+        &.art {
+            @include mb-color('art');
+        }
+        &.restoration {
+            @include mb-color('restoration');
+        }
+        &.materials {
+            @include mb-color('materials');
+        }
+        &:hover, &.hover {
+            @include animation(quarterspin 200ms 1 linear);
+        }
+    }
+}  
+
+.view-projects-more-wrapper {
+    clear: both;
+    text-align: center;
+    .view-projects-more-button {
+        @extend .button;
+    }
+}
+
+.view-projects-wrapper {
+    @include without-margins();
+    margin-bottom: #{$margin*2};
+    &.design > .view-projects-more-wrapper > .view-projects-more-button {
+        background-color: $blue;
+    }
+    &.art > .view-projects-more-wrapper > .view-projects-more-button {
+        background-color: $purple;
+    }
+    &.restoration > .view-projects-more-wrapper > .view-projects-more-button {
+        background-color: $color-primary-1;
+    }
+    &.materials > .view-projects-more-wrapper > .view-projects-more-button {
+        background-color: $color-primary-2;
+    }
+}
+
+
+.view-projects {
+    //@include border();
+    @include without-margins();
+    .views-row {
+        &.views-row-even {
+            @include breakpoint($tab) {
+                .project-teaser-image {
+                    &.normal {
+                        @include grid-span(6, 7);
+                    }
+                }
+                .right {
+                    &.normal {
+                        @include grid-span(6, 1);
+                        margin-right: 0;
+                    }
+                }   
+            }         
+        }
+    }
+}
+
+.page-projects {
+    .view-projects {
+        .view-header {
+            .projects-header-title {
+                @extend .title-big;
+            }
+            //background-color: $red;
+            //color: $white;
+            padding: #{$margin/2};
+            margin: 0 0 #{$margin} 0;
+            text-align: center;
+            @include breakpoint($mobile) {
+                padding: $margin;
+                margin: #{$margin*2} 0 $margin 0;
+            }
+            .projects-header-description {
+                width: 100%;
+                @include breakpoint($tab) {
+                    width: 60%;
+                }
+                margin: 0 auto;
+                //font: 1.5rem $font2;
+                text-align: left;
+            }
+        }
+        /*
+        &.design > .view-header {
+            //@include background-image(linear-gradient(to left, $turquoise 5%, $blue 95%));
+            @include mb-gradient-bg('design');
+        }
+        &.art > .view-header {
+            //@include background-image(linear-gradient(to left, $color-primary-1 5%, $purple 95%));
+            @include mb-gradient-bg('art');
+        }
+        &.restoration > .view-header {
+            //@include background-image(linear-gradient(to left, $color-secondary-2-1 5%, $color-secondary-1-1 95%));
+            @include mb-gradient-bg('restoration');
+        }
+        &.materials > .view-header {
+            //@include background-image(linear-gradient(to left, $color-secondary-1-0 5%, $color-primary-2 95%));
+            @include mb-gradient-bg('materials');
+        }
+        */
+    }
+}

@@ -1,0 +1,107 @@
+@import "../mixins/mixins";
+.l-footer {
+    position: relative;
+    width: 100%;
+    float: left;
+    padding: #{$margin / 2};
+    margin-top: #{$margin*2};
+    background-color: $blue;
+    color: $white;
+    font-family: $font;
+    font-weight: $normal;
+    text-align: center;
+    .main-menu {
+        padding: 0;
+        margin: 0 0 .5rem 0;
+        list-style: none;
+        @include display-flex;
+        @include flex-wrap(wrap);
+        @include justify-content(center);
+        .main-menu-item {
+            margin: 0 .25rem;
+            @include breakpoint($mobile) {
+                margin: 0 #{$margin/2};
+            }
+            display: inline-block; /* non-flexbox browsers */
+            .main-menu-link {
+                color: $white;
+                text-decoration: none;
+            }
+        }
+    }
+    .menu-footer {
+        padding: 0;
+        margin: 0 0 .25rem 0;
+        list-style: none;
+        @include display-flex;
+        @include flex-wrap(wrap);
+        @include justify-content(center);
+        .menu-footer-item {
+            margin: 0 .25rem;
+            @include breakpoint($mobile) {
+                margin: 0 #{$margin/2};
+            }
+            display: inline-block; /* non-flexbox browsers */
+            .menu-footer-link {
+                color: $white;
+                text-decoration: none;
+            }
+        }
+    }
+    .menu-social {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+            @include display-flex;
+            @include flex-wrap(wrap);
+            @include justify-content(center);
+            .menu-social-item {
+                margin: 0 .5rem;
+                display: inline-block; /* non-flexbox browsers */
+                .menu-social-link {
+                    display: block;
+                    color: $white;
+                    text-decoration: none;
+                    text-indent: -100000px;
+                    &:after {
+                        display: block;
+                        font: 1.2rem $font3;
+                        content: '';
+                        text-indent: 0;
+                    }
+                    &.fb:after {content: '\e805';}
+                    &.insta:after {content: '\e803';}
+                    &.tw:after {content: '\e808';}
+                    &.in:after {content: '\e804';}
+                    &.pin:after {content: '\e807';}
+                }
+            }
+
+    }
+    .l-sign {
+        display: none;
+        position: absolute;
+        left: 1rem;
+        top: 0.3rem;
+        .milky-sign {
+            position: relative;
+            text-indent: -10000px;
+            display: block;
+            line-height: 0;
+            &:after {
+                text-indent: initial;
+                display: block;
+                font: 1rem $fontello;
+                color: inherit;
+            }
+            &.in:after {
+                content: '\e802';
+                @include link($white, $red);
+            }
+            &.out:after {
+                content: '\e803';
+                @include link($red, $grey);
+            }
+        }
+    }
+}
